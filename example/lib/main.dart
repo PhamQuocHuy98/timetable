@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:time_machine/time_machine.dart';
@@ -29,47 +31,13 @@ class _TimetableExampleState extends State<TimetableExample> {
     super.initState();
 
     _controller = TimetableController(
-      // A basic EventProvider containing a single event:
-      // eventProvider: EventProvider.list([
-      //   BasicEvent(
-      //     id: 0,
-      //     title: 'My Event',
-      //     color: Colors.blue,
-      //     start: LocalDate.today().at(LocalTime(13, 0, 0)),
-      //     end: LocalDate.today().at(LocalTime(15, 0, 0)),
-      //   ),
-      // ]),
-
-      // For a demo of overlapping events, use this one instead:
       eventProvider: positioningDemoEventProvider,
-
-      // Or even this short example using a Stream:
-      // eventProvider: EventProvider.stream(
-      //   eventGetter: (range) => Stream.periodic(
-      //     Duration(milliseconds: 16),
-      //     (i) {
-      //       final start =
-      //           LocalDate.today().atMidnight() + Period(minutes: i * 2);
-      //       return [
-      //         BasicEvent(
-      //           id: 0,
-      //           title: 'Event',
-      //           color: Colors.blue,
-      //           start: start,
-      //           end: start + Period(hours: 5),
-      //         ),
-      //       ];
-      //     },
-      //   ),
-      // ),
-
-      // Other (optional) parameters:
       initialTimeRange: InitialTimeRange.range(
         startTime: LocalTime(8, 0, 0),
-        endTime: LocalTime(20, 0, 0),
+        endTime: LocalTime(22, 00, 0),
       ),
       initialDate: LocalDate.today(),
-      visibleRange: VisibleRange.days(3),
+      visibleRange: VisibleRange.days(2),
       firstDayOfWeek: DayOfWeek.monday,
     );
   }
@@ -94,22 +62,56 @@ class _TimetableExampleState extends State<TimetableExample> {
           ),
         ],
       ),
-      body: Timetable<BasicEvent>(
+      body: Timetable(
         controller: _controller,
         onEventBackgroundTap: (start, isAllDay) {
-          _showSnackBar('Background tapped $start is all day event $isAllDay');
+          print('Background tapped $start is all day event $isAllDay');
         },
         eventBuilder: (event) {
-          return BasicEventWidget(
-            event,
-            onTap: () => _showSnackBar('Part-day event $event tapped'),
+          return DataEventWidget(
+            text: 'Ahihi',
+            onTap: () => print('Part-day event $event tapped'),
           );
         },
         allDayEventBuilder: (context, event, info) => BasicAllDayEventWidget(
           event,
           info: info,
-          onTap: () => _showSnackBar('All-day event $event tapped'),
+          onTap: () {
+            print('All-day event $event tapped');
+          },
         ),
+        dateHeaderBuilder: (context, date) {
+          int r = (Random().nextInt(255));
+          return Container(
+            color: Color.fromRGBO(r, r, r, 1),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(date.dayOfMonth.toString()),
+                Text(date.monthOfYear.toString()),
+              ],
+            ),
+          );
+        },
+        lengthOfStaff: 0,
+        callBackStaffChange: (context, index, date) {
+          print(date);
+          int r = (Random().nextInt(255));
+          return GestureDetector(
+            child: Container(
+              color: Color.fromRGBO(r, r, r, 1),
+              child: Text(
+                index.toString(),
+              ),
+            ),
+            onTap: () {
+              print(date);
+            },
+          );
+        },
+        leadingHeaderBuilder: (context, date) {
+          return const SizedBox();
+        },
       ),
     );
   }

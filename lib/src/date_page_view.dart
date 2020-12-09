@@ -13,12 +13,25 @@ class DatePageView<E extends Event> extends StatefulWidget {
     Key key,
     @required this.controller,
     @required this.builder,
+    @required this.callBackStaffChange,
+    this.allowScroll = true,
+    this.lengthOfStaff = 0,
   })  : assert(controller != null),
         assert(builder != null),
         super(key: key);
 
   final TimetableController<E> controller;
   final DateWidgetBuilder builder;
+
+  final int lengthOfStaff;
+
+  final Widget Function(BuildContext context, int index, LocalDate date)
+      callBackStaffChange;
+
+  /// if alowwScoll is true ->
+  /// physics: TimetableScrollPhysics(widget.controller),
+  ///  else   physics: NeverScrollPhysics
+  final bool allowScroll;
 
   @override
   _DatePageViewState createState() => _DatePageViewState();
@@ -31,6 +44,10 @@ class _DatePageViewState extends State<DatePageView> {
   void initState() {
     super.initState();
     _controller = widget.controller.scrollControllers.addAndGet();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.lengthOfStaff != 0) _controller.jumpTo(0);
+    });
   }
 
   @override
@@ -45,7 +62,9 @@ class _DatePageViewState extends State<DatePageView> {
 
     return Scrollable(
       axisDirection: AxisDirection.right,
-      physics: TimetableScrollPhysics(widget.controller),
+      physics: widget.allowScroll
+          ? TimetableScrollPhysics(widget.controller)
+          : NeverScrollableScrollPhysics(),
       controller: _controller,
       viewportBuilder: (context, position) {
         return Viewport(
@@ -54,12 +73,27 @@ class _DatePageViewState extends State<DatePageView> {
           anchor: 0,
           slivers: <Widget>[
             SliverFillViewport(
+              padEnds: false,
               viewportFraction: 1 / visibleDays,
               delegate: SliverChildBuilderDelegate(
-                (context, index) => widget.builder(
-                  context,
-                  LocalDate.fromEpochDay(index + visibleDays ~/ 2),
-                ),
+                (context, index) {
+                  if (widget.lengthOfStaff == 0) {
+                    return widget.builder?.call(
+                      context,
+                      LocalDate.fromEpochDay(index + visibleDays ~/ 2),
+                    );
+                  } else {
+                    if (index > widget.lengthOfStaff) {
+                      return null;
+                    } else {
+                      return widget.callBackStaffChange?.call(
+                        context,
+                        index,
+                        LocalDate.today().addDays(index),
+                      );
+                    }
+                  }
+                },
               ),
             ),
           ],

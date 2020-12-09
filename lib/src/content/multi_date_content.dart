@@ -17,6 +17,8 @@ class MultiDateContent<E extends Event> extends StatefulWidget {
     Key key,
     @required this.controller,
     @required this.eventBuilder,
+    @required this.lengthOfStaff,
+    @required this.callBackStaffChange,
     this.onEventBackgroundTap,
   })  : assert(controller != null),
         assert(eventBuilder != null),
@@ -25,6 +27,10 @@ class MultiDateContent<E extends Event> extends StatefulWidget {
   final TimetableController<E> controller;
   final EventBuilder<E> eventBuilder;
   final OnEventBackgroundTapCallback onEventBackgroundTap;
+  final int lengthOfStaff;
+
+  final Widget Function(BuildContext context, int index, LocalDate date)
+      callBackStaffChange;
 
   @override
   _MultiDateContentState<E> createState() => _MultiDateContentState<E>();
@@ -57,7 +63,30 @@ class _MultiDateContentState<E extends Event>
       ),
       child: DatePageView(
         controller: widget.controller,
+        lengthOfStaff: widget.lengthOfStaff,
+        allowScroll: false,
+        callBackStaffChange: (_, index, date) {
+          print(date);
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTapUp: widget.onEventBackgroundTap != null
+                    ? (details) {
+                        _callOnEventBackgroundTap(details, date, constraints);
+                      }
+                    : null,
+                child: StreamedDateEvents<E>(
+                  date: date,
+                  controller: widget.controller,
+                  eventBuilder: widget.eventBuilder,
+                ),
+              );
+            },
+          );
+        },
         builder: (_, date) {
+          print(date);
           return LayoutBuilder(
             builder: (context, constraints) {
               return GestureDetector(

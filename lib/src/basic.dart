@@ -80,6 +80,49 @@ class BasicEventWidget extends StatelessWidget {
   }
 }
 
+class DataEventWidget extends StatelessWidget {
+  const DataEventWidget({
+    Key key,
+    this.text,
+    this.onTap,
+  })  : assert(text != null),
+        super(key: key);
+
+  /// The [BasicEvent] to be displayed.
+  final String text;
+
+  /// An optional [VoidCallback] that will be invoked when the user taps this
+  /// widget.
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: context.theme.scaffoldBackgroundColor,
+          width: 0.75,
+        ),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      color: Colors.red,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(4, 2, 4, 0),
+          child: DefaultTextStyle(
+            style: context.textTheme.bodyText2.copyWith(
+              fontSize: 12,
+              color: Colors.white,
+            ),
+            child: Text(text),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// A simple [Widget] for displaying a [BasicEvent] as an all-day event.
 class BasicAllDayEventWidget extends StatelessWidget {
   const BasicAllDayEventWidget(

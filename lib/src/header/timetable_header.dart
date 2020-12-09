@@ -17,6 +17,8 @@ class TimetableHeader<E extends Event> extends StatelessWidget {
     this.onEventBackgroundTap,
     this.leadingHeaderBuilder,
     this.dateHeaderBuilder,
+    @required this.lengthOfStaff,
+    @required this.callBackStaffChange,
   })  : assert(controller != null),
         assert(allDayEventBuilder != null),
         super(key: key);
@@ -27,6 +29,11 @@ class TimetableHeader<E extends Event> extends StatelessWidget {
   final HeaderWidgetBuilder leadingHeaderBuilder;
   final HeaderWidgetBuilder dateHeaderBuilder;
 
+  final int lengthOfStaff;
+
+  final Widget Function(BuildContext context, int index, LocalDate date)
+      callBackStaffChange;
+
   @override
   Widget build(BuildContext context) {
     // Like [WeekYearRules.iso], but with a variable first day of week.
@@ -35,42 +42,20 @@ class TimetableHeader<E extends Event> extends StatelessWidget {
 
     return IntrinsicHeight(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(
             width: hourColumnWidth,
-            child: ValueListenableBuilder<LocalDate>(
-              valueListenable: controller.dateListenable,
-              builder: (context, date, _) {
-                final customHeader = leadingHeaderBuilder?.call(context, date);
-                if (customHeader != null) {
-                  return customHeader;
-                }
-
-                return Center(
-                  child: WeekIndicator(weekYearRule.getWeekOfWeekYear(date)),
-                );
-              },
-            ),
           ),
           Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                  height:
-                      context.timetableTheme?.totalDateIndicatorHeight ?? 72,
-                  child: MultiDateHeader(
-                    controller: controller,
-                    builder: dateHeaderBuilder,
-                  ),
-                ),
-                AllDayEvents<E>(
-                  controller: controller,
-                  onEventBackgroundTap: onEventBackgroundTap,
-                  allDayEventBuilder: allDayEventBuilder,
-                ),
-              ],
+            child: SizedBox(
+              height: 100,
+              child: MultiDateHeader(
+                controller: controller,
+                builder: dateHeaderBuilder,
+                lengthOfStaff: lengthOfStaff,
+                callBackStaffChange: callBackStaffChange,
+              ),
             ),
           ),
         ],

@@ -49,7 +49,7 @@ class AllDayEvents<E extends Event> extends StatelessWidget {
                   return ValueListenableBuilder(
                     valueListenable:
                         controller.scrollControllers.pageListenable,
-                    builder: (context, page, __) =>
+                    builder: (context, double page, __) =>
                         _buildContent(wrapperContext, context, events, page),
                   );
                 },

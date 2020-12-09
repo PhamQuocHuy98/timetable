@@ -22,7 +22,8 @@ class DateHoursPainter extends CustomPainter {
             ),
         ];
 
-  static final _pattern = LocalTimePattern.createWithCurrentCulture('HH:mm');
+  static final _pattern =
+      LocalTimePattern.createWithCurrentCulture('hh:mm tt');
 
   final TextStyle textStyle;
   final TextDirection textDirection;

@@ -15,6 +15,8 @@ class TimetableContent<E extends Event> extends StatelessWidget {
     Key key,
     @required this.controller,
     @required this.eventBuilder,
+    @required this.lengthOfStaff,
+    @required this.callBackStaffChange,
     this.onEventBackgroundTap,
   })  : assert(controller != null),
         assert(eventBuilder != null),
@@ -23,6 +25,10 @@ class TimetableContent<E extends Event> extends StatelessWidget {
   final TimetableController<E> controller;
   final EventBuilder<E> eventBuilder;
   final OnEventBackgroundTapCallback onEventBackgroundTap;
+  final int lengthOfStaff;
+
+  final Widget Function(BuildContext context, int index, LocalDate date)
+      callBackStaffChange;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,8 @@ class TimetableContent<E extends Event> extends StatelessWidget {
               controller: controller,
               eventBuilder: eventBuilder,
               onEventBackgroundTap: onEventBackgroundTap,
+              lengthOfStaff: lengthOfStaff,
+              callBackStaffChange: callBackStaffChange,
             ),
           ),
         ],
