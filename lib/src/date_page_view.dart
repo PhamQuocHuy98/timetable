@@ -73,7 +73,7 @@ class _DatePageViewState extends State<DatePageView> {
           anchor: 0,
           slivers: <Widget>[
             SliverFillViewport(
-              padEnds: false,
+              padEnds: visibleDays % 2 != 0,
               viewportFraction: 1 / visibleDays,
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
