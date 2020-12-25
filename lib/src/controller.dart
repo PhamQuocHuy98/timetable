@@ -106,6 +106,14 @@ class TimetableController<E extends Event> {
     );
   }
 
+  Future<void> jumToOffet(
+    double value, {
+    Curve curve = Curves.easeInOut,
+    Duration duration = const Duration(milliseconds: 200),
+  }) {
+    scrollControllers.animateTo(value, curve: curve, duration: duration);
+  }
+
   /// Discards any resources used by the controller.
   ///
   /// After this is called, the controller is not in a usable state and should
