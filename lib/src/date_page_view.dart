@@ -44,10 +44,6 @@ class _DatePageViewState extends State<DatePageView> {
   void initState() {
     super.initState();
     _controller = widget.controller.scrollControllers.addAndGet();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.lengthOfStaff != 0) _controller.jumpTo(0);
-    });
   }
 
   @override
@@ -62,9 +58,7 @@ class _DatePageViewState extends State<DatePageView> {
 
     return Scrollable(
       axisDirection: AxisDirection.right,
-      physics: widget.allowScroll
-          ? TimetableScrollPhysics(widget.controller)
-          : NeverScrollableScrollPhysics(),
+      physics: TimetableScrollPhysics(widget.controller),
       controller: _controller,
       viewportBuilder: (context, position) {
         return Viewport(
@@ -83,7 +77,7 @@ class _DatePageViewState extends State<DatePageView> {
                       LocalDate.fromEpochDay(index + visibleDays ~/ 2),
                     );
                   } else {
-                    if (index > widget.lengthOfStaff) {
+                    if (index >= widget.lengthOfStaff) {
                       return null;
                     } else {
                       return widget.callBackStaffChange?.call(
@@ -93,6 +87,17 @@ class _DatePageViewState extends State<DatePageView> {
                       );
                     }
                   }
+                  // } else {
+                  //   if (index > widget.lengthOfStaff) {
+                  //     return null;
+                  //   } else {
+                  //     return widget.callBackStaffChange?.call(
+                  //       context,
+                  //       index,
+                  //       LocalDate.fromEpochDay(index + visibleDays ~/ 2),
+                  //     );
+                  //   }
+                  // }
                 },
               ),
             ),
