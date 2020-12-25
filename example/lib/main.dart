@@ -40,6 +40,13 @@ class _TimetableExampleState extends State<TimetableExample> {
       visibleRange: VisibleRange.days(2),
       firstDayOfWeek: DayOfWeek.monday,
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      animatoToday();
+    });
+  }
+
+  animatoToday() async {
+    //
   }
 
   @override
@@ -57,7 +64,10 @@ class _TimetableExampleState extends State<TimetableExample> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.today),
-            onPressed: () => _controller.animateToToday(),
+            onPressed: () async {
+              print("?");
+              animatoToday();
+            },
             tooltip: 'Jump to today',
           ),
         ],
@@ -88,7 +98,7 @@ class _TimetableExampleState extends State<TimetableExample> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(date.dayOfMonth.toString()),
-                Text(date.monthOfYear.toString()),
+                Text(date.toString()),
               ],
             ),
           );
@@ -100,8 +110,18 @@ class _TimetableExampleState extends State<TimetableExample> {
           return GestureDetector(
             child: Container(
               color: Color.fromRGBO(r, r, r, 1),
-              child: Text(
-                index.toString(),
+              child: Column(
+                children: [
+                  Text(
+                    (index).toString(),
+                  ),
+                  Text(
+                    date.toString(),
+                  ),
+                  Text(
+                    index.toString(),
+                  ),
+                ],
               ),
             ),
             onTap: () {
