@@ -37,7 +37,7 @@ class _TimetableExampleState extends State<TimetableExample> {
         endTime: LocalTime(22, 00, 0),
       ),
       initialDate: LocalDate.today(),
-      visibleRange: VisibleRange.days(2),
+      visibleRange: VisibleRange.days(1),
       firstDayOfWeek: DayOfWeek.monday,
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -46,7 +46,7 @@ class _TimetableExampleState extends State<TimetableExample> {
   }
 
   animatoToday() async {
-    //
+    //_controller.jumToOffet(0);
   }
 
   @override
@@ -74,6 +74,11 @@ class _TimetableExampleState extends State<TimetableExample> {
       ),
       body: Timetable(
         controller: _controller,
+        allowSrcoll: false,
+        onPageChanged: () {
+          print("POage chaneg");
+          print(_controller.currentlyVisibleDates.start);
+        },
         onEventBackgroundTap: (start, isAllDay) {
           print('Background tapped $start is all day event $isAllDay');
         },

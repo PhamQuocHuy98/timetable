@@ -58,7 +58,9 @@ class _DatePageViewState extends State<DatePageView> {
 
     return Scrollable(
       axisDirection: AxisDirection.right,
-      physics: TimetableScrollPhysics(widget.controller),
+      physics: widget.allowScroll
+          ? TimetableScrollPhysics(widget.controller)
+          : NeverScrollableScrollPhysics(),
       controller: _controller,
       viewportBuilder: (context, position) {
         return Viewport(

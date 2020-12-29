@@ -44,8 +44,10 @@ class Timetable<E extends Event> extends StatelessWidget {
     this.theme,
     this.dateHeaderBuilder,
     this.leadingHeaderBuilder,
+    this.onPageChanged,
     @required this.lengthOfStaff,
     @required this.callBackStaffChange,
+    this.allowSrcoll = false,
   })  : assert(controller != null),
         assert(eventBuilder != null),
         super(key: key);
@@ -80,6 +82,9 @@ class Timetable<E extends Event> extends StatelessWidget {
   final Widget Function(BuildContext context, int index, LocalDate date)
       callBackStaffChange;
 
+  final bool allowSrcoll;
+
+  final Function onPageChanged;
   @override
   Widget build(BuildContext context) {
     Widget child = Column(
@@ -93,6 +98,7 @@ class Timetable<E extends Event> extends StatelessWidget {
               allDayEventBuilder ?? (_, event, __) => eventBuilder(event),
           callBackStaffChange: callBackStaffChange,
           lengthOfStaff: lengthOfStaff,
+          onPageChanged: onPageChanged,
         ),
         Expanded(
           child: TimetableContent<E>(
@@ -101,6 +107,8 @@ class Timetable<E extends Event> extends StatelessWidget {
             onEventBackgroundTap: onEventBackgroundTap,
             lengthOfStaff: lengthOfStaff,
             callBackStaffChange: callBackStaffChange,
+            allowScroll: allowSrcoll,
+            onPageChanged: onPageChanged,
           ),
         ),
       ],

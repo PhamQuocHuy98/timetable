@@ -17,6 +17,8 @@ class TimetableContent<E extends Event> extends StatelessWidget {
     @required this.eventBuilder,
     @required this.lengthOfStaff,
     @required this.callBackStaffChange,
+    this.onPageChanged,
+    this.allowScroll = false,
     this.onEventBackgroundTap,
   })  : assert(controller != null),
         assert(eventBuilder != null),
@@ -29,7 +31,9 @@ class TimetableContent<E extends Event> extends StatelessWidget {
 
   final Widget Function(BuildContext context, int index, LocalDate date)
       callBackStaffChange;
+  final Function onPageChanged;
 
+  final bool allowScroll;
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
@@ -64,6 +68,8 @@ class TimetableContent<E extends Event> extends StatelessWidget {
               onEventBackgroundTap: onEventBackgroundTap,
               lengthOfStaff: lengthOfStaff,
               callBackStaffChange: callBackStaffChange,
+              allowScroll: allowScroll,
+              onPageChanged: onPageChanged,
             ),
           ),
         ],

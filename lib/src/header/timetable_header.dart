@@ -17,6 +17,8 @@ class TimetableHeader<E extends Event> extends StatelessWidget {
     this.onEventBackgroundTap,
     this.leadingHeaderBuilder,
     this.dateHeaderBuilder,
+    this.allowSrcoll = false,
+    this.onPageChanged,
     @required this.lengthOfStaff,
     @required this.callBackStaffChange,
   })  : assert(controller != null),
@@ -33,6 +35,10 @@ class TimetableHeader<E extends Event> extends StatelessWidget {
 
   final Widget Function(BuildContext context, int index, LocalDate date)
       callBackStaffChange;
+
+  final bool allowSrcoll;
+
+  final Function onPageChanged;
 
   @override
   Widget build(BuildContext context) {

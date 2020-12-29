@@ -13,6 +13,8 @@ class MultiDateHeader<E extends Event> extends StatelessWidget {
     @required this.controller,
     @required this.callBackStaffChange,
     @required this.lengthOfStaff,
+    this.allowSrcoll=false,
+    this.onPageChanged,
     this.builder,
   })  : assert(controller != null),
         super(key: key);
@@ -23,6 +25,10 @@ class MultiDateHeader<E extends Event> extends StatelessWidget {
 
   final Widget Function(BuildContext context, int index, LocalDate date)
       callBackStaffChange;
+
+  final bool allowSrcoll;
+
+  final Function onPageChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +41,8 @@ class MultiDateHeader<E extends Event> extends StatelessWidget {
       builder: (context, date) {
         return builder?.call(context, date);
       },
+      allowScroll: allowSrcoll,
+      
     );
   }
 }
