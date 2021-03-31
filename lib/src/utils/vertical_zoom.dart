@@ -61,6 +61,7 @@ class VerticalZoom extends StatefulWidget {
   const VerticalZoom({
     Key key,
     this.initialZoom = const InitialZoom.zoom(1),
+    this.canScroll = false,
     @required this.child,
     this.minChildHeight = 1,
     this.maxChildHeight = double.infinity,
@@ -78,6 +79,7 @@ class VerticalZoom extends StatefulWidget {
   final Widget child;
   final double minChildHeight;
   final double maxChildHeight;
+  final bool canScroll;
 
   @override
   _VerticalZoomState createState() => _VerticalZoomState();
@@ -126,8 +128,7 @@ class _VerticalZoomState extends State<VerticalZoom> {
           onScaleUpdate: (details) =>
               _onZoomUpdate(height, details, timetableTheme),
           child: SingleChildScrollView(
-            // We handle scrolling manually to improve zoom detection.
-            physics: NeverScrollableScrollPhysics(),
+            physics: widget.canScroll ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
             controller: _scrollController,
             child: SizedBox(
               height: _contentHeight,
