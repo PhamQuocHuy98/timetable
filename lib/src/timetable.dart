@@ -48,12 +48,15 @@ class Timetable<E extends Event> extends StatelessWidget {
     @required this.lengthOfStaff,
     @required this.callBackStaffChange,
     this.allowSrcoll = false,
+    this.canScroll =false
   })  : assert(controller != null),
         assert(eventBuilder != null),
         super(key: key);
 
   final TimetableController<E> controller;
   final EventBuilder<E> eventBuilder;
+  
+  final bool canScroll;
 
   /// Optional [Widget] builder function for all-day event shown in the header.
   ///
@@ -102,6 +105,7 @@ class Timetable<E extends Event> extends StatelessWidget {
         ),
         Expanded(
           child: TimetableContent<E>(
+            canScroll: canScroll,
             controller: controller,
             eventBuilder: eventBuilder,
             onEventBackgroundTap: onEventBackgroundTap,

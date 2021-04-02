@@ -18,6 +18,7 @@ class TimetableContent<E extends Event> extends StatelessWidget {
     @required this.lengthOfStaff,
     @required this.callBackStaffChange,
     this.onPageChanged,
+    this.canScroll = false,
     this.allowScroll = false,
     this.onEventBackgroundTap,
   })  : assert(controller != null),
@@ -25,6 +26,7 @@ class TimetableContent<E extends Event> extends StatelessWidget {
         super(key: key);
 
   final TimetableController<E> controller;
+  final bool canScroll;
   final EventBuilder<E> eventBuilder;
   final OnEventBackgroundTapCallback onEventBackgroundTap;
   final int lengthOfStaff;
@@ -40,6 +42,7 @@ class TimetableContent<E extends Event> extends StatelessWidget {
     final timetableTheme = context.timetableTheme;
 
     return VerticalZoom(
+      canScroll: canScroll,
       initialZoom: controller.initialTimeRange.asInitialZoom(),
       minChildHeight:
           (timetableTheme?.minimumHourHeight ?? 16) * TimeConstants.hoursPerDay,
